@@ -1,0 +1,200 @@
+# Problem parameters
+"Program":
+    # Choose from following list of problem types:
+    # 1 = Hydrodynamics: Lid-Driven Cavity
+    # 2 = Hydrodynamics: Decaying Flow
+    # 3 = Hydrodynamics: Channel Flow
+    # 4 = Hydrodynamics: Forced Channel Flow
+    # 5 = Flows with scalar: Heated bottom plate 
+    # 6 = Flows with scalar: Heated upper plate
+    # 7 = Flows with scalar: Heated sidewall
+    "Problem Type": 4
+
+    # Choose from the following initial conditions
+    # 0 = Zero-initial condition
+    # 1 = Taylor Green Vortices
+    # 2 = Sinusoidal Perturbation (for Channel Flow)
+    # 3 = Uniform Random Perturbation (for Channel Flow)
+    # 4 = Parabolic Random Perturbation (for Channel Flow)
+    # 5 = Sinusoidal Random Perturbation (for Channel Flow)
+    # 6 = Linear Temperature Profile (for Scalar Flow)
+    # 7 = Cosine Temperature Profile (for Scalar Flow)
+    # 8 = Sine Temperature Profile (for Scalar Flow)
+    "Initial Condition": 5
+
+    # Mean flow velocity (for Channel Flow)
+    # If option 3 or 4 is selected above, the perturbation is imposed on a background uniform flow
+    # This mean background velocity can be specified in non-dimensional units corresponding to Re
+    "Mean Flow Velocity": 3
+
+    # Intensity of random perturbation (for Channel Flow)
+    # If option 3 or 4 is selected above, the intensity of perturbation can be set below.
+    # The intensity is expressed as a percentage of the uniform mean flow velocity
+    "Perturbation Intensity": 15
+
+    # Domain type indicates periodicity/non-periodicity (P/N) along X, Y and Z directions
+    # If domain is periodic along X and Y, but non-periodic along Z, Domain Type = PPN
+    # If periodic along all directions, Domain Type = PPP, and so on
+    # For 2D runs, only X and Z direction values are considered
+    "Domain Type": "PPN"
+
+    # For RBC, specify the non-dimensionalization to be used:
+    # 1 = small U, large Pr
+    # 2 = large U, large Pr
+    # 3 = small U, small Pr
+    # 4 = large U, small Pr
+    "RBC Type": 1
+
+    # Enable/Disable LES by choosing LES Model
+    # 0 = Disable LES
+    # 1 = Stretched Spiral Vortex LES (velocity field only)
+    # 2 = Stretched Spiral Vortex LES (both velocity and scalar fields)
+    "LES Model": 0
+
+    # Non-dimensional parameters
+    "Reynolds Number": 10
+    "Rossby Number": 12
+    "Rayleigh Number": 10000
+    "Prandtl Number": 0.71
+    "Taylor Number": 0.0
+
+    # Dimensions of the domain
+    "X Length": 4.0
+    "Y Length": 2.0
+    "Z Length": 2.0
+
+    # For Problem Type 5, heating can be applied at bottom wall using a circular heating plate
+    "Heating Plate": false
+    # If above value is true, the radius of this plate is specified below.
+    # If the radius exceeds half the domain length specifed above, the solver will run like ordinary RBC
+    # Currently the solver supports this non-homogeneous BC only for 3D runs
+    "Plate Radius": 0.25
+
+    # Choose the type of forcing (source term)
+    # 0 = No forcing
+    # 1 = Random forcing (This is yet to be implemented)
+    # 2 = Coriolis force 
+    # 3 = Buoyancy force (Natural convection: only applicable for flows with scalar)
+    # 4 = Buoyancy + Coriolis force (Rotating natural convection: only applicable for flows with scalar)
+    # 5 = Constant pressure gradient (along X-direction: used mainly for periodic channel flows)
+    "Force": 5
+
+    # If constant pressure gradient is chosen as forcing, set the value of mean pressure gradient
+    "Mean Pressure Gradient": 1.0
+
+
+# Mesh parameters
+"Mesh":
+    # The grid spacing along each direction can be set according to one of the following:
+    # U - Uniform spacing
+    # S - Single sided tangent-hyperbolic stretching (finest near one edge and coarsest at the opposite edge) (under development)
+    # D - Double sided tangent-hyperbolic stretching (finest near both edges and coarsest at the center)
+    # Specify the required spacing along X, Y and Z directions by using appropriate letters from above
+    # Eg. Uniform spacing in X-direction, double sided tan-hyp stretching along Y and single sided tan-hyp along Z would be "UDS"
+    "Mesh Type": "UUD"
+
+    # Stretching factor to be used for tangent-hyperbolic grids.
+    # This option is considered only when tangent-hyperbolic stretching is specified in the Mesh Type
+    "X Beta": 1.0
+    "Y Beta": 1.0
+    "Z Beta": 1.0
+
+    # Choose the grid sizes (number of cells) as indices from the list below
+    # These sizes are set to allow multigrid operations on cell-centers
+    # 2D simulations can be run by setting Y Index to 0
+    # Grid sizes: 1 2 4 8 15 32 64 128 256 512 1024 2048 4096 8192 16384]
+    # Size index: 0 1 2 3  4  5  6  7   8   9   10   11   12   13    14
+    "X Index": 6
+    "Y Index": 6
+    "Z Index": 5
+
+
+# Parellelization parameters
+"Parallel":
+    "Number of OMP threads": 1
+    "X Number of Procs": 2
+    "Y Number of Procs": 2
+
+
+# Solver parameters
+"Solver":
+    # Choose from following list of differentiation stencils
+    # 1 = Second-order central-difference
+    # 2 = Fourth-order central-difference
+    "Differentiation Scheme": 1
+
+    # Choose from following list of integration schemes:
+    # 1 = Implicit Crank-Nicholson
+    # 2 = Low Storage 3rd Order Runge-Kutta
+    "Integration Scheme": 1
+
+    # Tolerance used in iterative method (if Implicit Crank-Nicholson scheme is chosen above)
+    "Solve Tolerance": 1.0e-6
+
+    # Set below flag to true if restarting from a solution file
+    # If flag is true, solver will read the last written solution file in output directory for restart
+    "Restart Run": false
+
+    # Set below flag to true for adaptive time-stepping based on Courant number
+    "Use CFL Condition": false
+    # If above flag is true, then set the value of Courant number below
+    "Courant Number": 0.1
+    "Time-Step": 0.001
+    "Final Time": 20.0
+
+    # Number of iterations to display output to standard I/O
+    "I/O Count": 100
+
+    # Select the format in which solution data must be written at each solution write interval
+    # 1 = Write a single HDF5 file inside ./output/, containing all the variables - Vx, Vy, P, etc.
+    # 2 = Create a sub-folder inside ./output/, and write separate HDF5 files for separate variables.
+    # Option 1 is easier for post-processing, while Option 2 maybe used with large data.
+    "Solution Format": 1
+
+    # Time interval at which solution file must be written
+    "Solution Write Interval": 10.0
+
+    # Time interval at which restart file must be written
+    "Restart Write Interval": 50.0
+
+    # Set below flag to true if data from probes have to be recorded, if true, set appropriate probe time interval
+    "Record Probes": false
+    "Probe Time Interval": 0.01
+
+    # Enter as many sets of probes as needed in Python NumPy's linspace style - startIndex:endIndex:noOfProbes
+    # Enter each set in square braces [], with each set separated by new line or space
+    "Probes": >
+        [29, 15, 29]
+
+
+# Poisson solver parameters
+"Multigrid":
+    # Number of restriction/prolongation steps in each V-Cycle
+    "V-Cycle Depth": 4
+    # Number of V-Cycles to be performed
+    "V-Cycle Count": 7
+
+    # Set the flag to true if the solver should solve at coarsest level instead of just smoothing
+    "Solve Coarsest": false
+    # If the above flag is true, set the tolerance used in iterative method when solving
+    "Solve Tolerance": 1.0e-6
+
+    # Iterative method to be used for smoothing
+    # 0 = Jacobi iteration
+    # 1 = Gauss-Seidel iteration
+    "Smoothing Method": 1
+
+    # Number of smoothing iterations to be performed after restriction operations
+    "Pre-Smoothing Count": 3
+    # Number of smoothing iterations to be performed after prolongation operations
+    "Post-Smoothing Count": 3
+
+    # Type of residual to be computed at end of each V-Cycle of the multigrid method
+    # This value can be set as below:
+    # 0 = Maximum Absolute Error = max(|b - Ax|)/max(|b|)
+    # 1 = Mean Absolute Error = mean(|b - Ax|)/mean(|b|)
+    # 2 = Root Mean Square Error = rms(b - Ax)/rms(b)
+    "Residual Type": 1
+
+    # Flag to enable printing of the residual computed using above method (used mainly to test multigrid solver)
+    "Print Residual": false

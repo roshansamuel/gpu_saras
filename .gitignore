@@ -1,0 +1,11 @@
+*.gz
+*.swp
+*.swo
+*.out
+*.vtk
+*.lay
+saras
+compile/build/
+tests/build/
+tests/ldcTest/*.png
+tests/channelTest/*.png
